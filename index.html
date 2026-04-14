@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#fdf6ee">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="宇宙捎來的話">
+<meta name="description" content="每天一句，跨越時空的智慧輕觸你">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>宇宙捎來的話</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#fdf6ee;--card:#fffcf8;--bd:#e8d8c4;
+  --t1:#4a3420;--t2:#5a4030;--t3:#b09880;
+  --ac:#b8956c;--ac2:#a07050;--ac3:#c0a070;
+  --dv:#ede0cc;--hint:#c0a888;
+}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);min-height:100vh;margin:0;}
+.app{min-height:100vh;padding:1.3rem 1rem 2.5rem;display:flex;flex-direction:column;align-items:center;position:relative;background:var(--bg);transition:background .3s;}
+
+/* topbar */
+.topbar{width:100%;max-width:360px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.date-chip{font-size:11px;color:var(--t3);letter-spacing:.2em;}
+.tbbtns{display:flex;gap:8px;}
+.iBtn{background:none;border:1px solid #e0d4c4;border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#c0a888;transition:all .2s;}
+.iBtn:hover{border-color:var(--ac);color:var(--ac);}
+.iBtn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+
+/* title */
+.ttl-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem;margin-bottom:.5rem;}
+.ttl-en{font-size:10px;color:#c8b09a;letter-spacing:.35em;}
+.ttl{font-family:'Noto Serif TC',serif;font-size:22px;font-weight:300;color:var(--t1);letter-spacing:.5em;}
+.ttl-line{width:40px;height:1px;background:linear-gradient(90deg,transparent,#c8a888,transparent);margin:.4rem 0;}
+.sub{font-size:11px;color:#b8a088;letter-spacing:.18em;margin-bottom:1.5rem;}
+
+/* jar */
+.jar-wrap{display:flex;flex-direction:column;align-items:center;gap:.9rem;margin-bottom:1.4rem;}
+.dBtn{background:none;border:1px solid var(--ac3);color:var(--ac2);border-radius:2px;padding:.65rem 2rem;font-family:'Noto Serif TC',serif;font-size:13px;letter-spacing:.3em;cursor:pointer;transition:all .25s;position:relative;}
+.dBtn::before{content:'';position:absolute;inset:-4px;border:1px solid #e0c8b0;border-radius:2px;pointer-events:none;}
+.dBtn:hover{background:#fdf0e4;border-color:var(--ac2);}
+.dBtn:disabled{opacity:.35;cursor:not-allowed;}
+.hint{font-size:11px;color:var(--hint);letter-spacing:.12em;}
+
+/* card flip */
+.cwrap{width:100%;max-width:355px;}
+.cinner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.4,0,.2,1);}
+.cinner.flip{transform:rotateY(180deg);}
+.cf,.cb{width:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:2px;background:var(--card);border:1px solid var(--bd);}
+.cb{position:absolute;top:0;left:0;transform:rotateY(180deg);padding:1.4rem 1.3rem;}
+.cf{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;gap:.8rem;padding:2rem;}
+.cf-circle{width:48px;height:48px;border-radius:50%;border:1px solid #e0c8b0;display:flex;align-items:center;justify-content:center;}
+.cf-inner{width:28px;height:28px;border-radius:50%;border:1px solid #d4b898;background:var(--bg);}
+.cf-label{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:300;color:#9a7858;letter-spacing:.35em;}
+.cf-sub{font-size:10px;color:#c8b098;letter-spacing:.15em;}
+
+/* card back */
+.toprow{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.abadge{font-size:11px;color:#a08060;letter-spacing:.15em;border-bottom:1px solid var(--bd);padding-bottom:2px;}
+.fvBtn{background:none;border:none;cursor:pointer;font-size:16px;line-height:1;opacity:.75;transition:all .15s;}
+.fvBtn:hover{opacity:1;transform:scale(1.15);}
+.illa{display:flex;justify-content:center;margin-bottom:1rem;}
+.ql{font-size:10px;color:var(--hint);letter-spacing:.25em;text-align:center;margin-bottom:.5rem;}
+.qt{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:300;line-height:2.1;color:var(--t1);text-align:center;margin-bottom:.4rem;}
+.qs{font-size:11px;color:#b09878;text-align:right;margin-bottom:1rem;}
+.hr-dot{display:flex;align-items:center;gap:.5rem;margin:.7rem 0;}
+.hr-dot::before,.hr-dot::after{content:'';flex:1;height:1px;background:var(--dv);}
+.hr-dot span{font-size:8px;color:#c8a880;}
+.stit{font-size:10px;color:#b08860;letter-spacing:.25em;margin-bottom:.4rem;}
+.atxt,.actxt{font-size:12.5px;line-height:1.95;color:var(--t2);font-weight:300;}
+.abox{border-left:1px solid #d4b898;padding:.5rem 0 .5rem .8rem;margin-top:.3rem;}
+.cacts{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--dv);}
+.sBtn{font-size:10px;color:var(--ac2);background:none;border:none;cursor:pointer;letter-spacing:.15em;padding:0;}
+.rBtn{font-size:10px;color:var(--hint);background:none;border:none;cursor:pointer;letter-spacing:.15em;padding:0;}
+.cnt{font-size:10px;color:#c8b898;text-align:center;margin-top:.6rem;letter-spacing:.08em;}
+
+/* streak bar */
+.sbar{width:100%;max-width:355px;margin-top:1.2rem;display:flex;justify-content:space-between;padding:.8rem 1.2rem;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
+.si{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.sn{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:300;color:var(--ac);}
+.sl{font-size:10px;color:var(--hint);letter-spacing:.1em;}
+
+/* overlays */
+.ov{position:fixed;top:0;left:0;width:100%;height:100%;z-index:10;background:var(--bg);padding:1.2rem 1rem 2rem;display:none;flex-direction:column;align-items:center;overflow-y:auto;}
+.ov.on{display:flex;}
+.ovh{width:100%;max-width:355px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--bd);}
+.ovttl{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:300;color:var(--t1);letter-spacing:.3em;}
+.xBtn{background:none;border:none;font-size:16px;cursor:pointer;color:var(--hint);}
+.fvlist{width:100%;max-width:355px;display:flex;flex-direction:column;gap:.8rem;}
+.fvc{border-bottom:1px solid var(--dv);padding-bottom:.8rem;}
+.fvq{font-family:'Noto Serif TC',serif;font-size:13px;font-weight:300;color:var(--t1);line-height:1.9;margin-bottom:.25rem;}
+.fvsrc{font-size:11px;color:#b09878;}
+.emp{font-size:12px;color:var(--hint);margin-top:2rem;letter-spacing:.12em;text-align:center;line-height:2;}
+
+/* share overlay */
+.sov{position:fixed;top:0;left:0;width:100%;height:100%;z-index:20;background:rgba(245,235,220,.92);padding:1.5rem 1rem 2rem;display:none;flex-direction:column;align-items:center;justify-content:flex-start;overflow-y:auto;}
+.sov.on{display:flex;}
+.sc{width:100%;max-width:320px;background:var(--card);border:1px solid #e0d0b8;padding:1.8rem 1.4rem;text-align:center;}
+.sc::before{content:'';display:block;width:30px;height:1px;background:#d4b898;margin:0 auto .9rem;}
+.sc::after{content:'';display:block;width:30px;height:1px;background:#d4b898;margin:.9rem auto 0;}
+.scd{font-size:10px;color:#c0a880;letter-spacing:.28em;margin-bottom:1rem;}
+.scil{display:flex;justify-content:center;margin-bottom:.9rem;}
+.scq{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:300;line-height:2.1;color:var(--t1);margin-bottom:.4rem;}
+.scsr{font-size:11px;color:#b09878;margin-bottom:.9rem;}
+.scan{font-size:11.5px;color:var(--t2);line-height:1.85;text-align:left;border-left:1px solid #d4b898;padding-left:.7rem;margin-bottom:.9rem;font-weight:300;}
+.scf{font-size:10px;color:#c8b098;letter-spacing:.18em;}
+.shi{font-size:11px;color:#b09878;margin-top:.9rem;letter-spacing:.1em;}
+.scl{margin-top:.8rem;background:none;border:1px solid #c8a880;color:#9a7858;border-radius:2px;padding:.3rem 1.2rem;font-size:11px;cursor:pointer;letter-spacing:.2em;font-family:'Noto Serif TC',serif;}
+
+/* dark mode */
+.dark{--bg:#1e1810;--card:#2a2018;--bd:#3a2e20;--t1:#f0e4d0;--t2:#c8b098;--t3:#907860;--hint:#907860;--dv:#3a2e20;}
+.dark .iBtn{border-color:#3a2e20;color:#907860;}
+.dark .cf-inner{background:var(--bg);}
+.dark .sov{background:rgba(20,14,8,.88);}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="date-chip" id="dateChip"></div>
+    <div class="tbbtns">
+      <button class="iBtn" onclick="openFav()" title="收藏夾">
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+      </button>
+      <button class="iBtn" onclick="toggleDark()" title="深色模式">
+        <svg viewBox="0 0 24 24" id="dkIco"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="ttl-wrap">
+    <div class="ttl-en">Cosmos Whisper</div>
+    <div class="ttl">宇宙捎來的話</div>
+    <div class="ttl-line"></div>
+    <div class="sub">每天一句，跨越時空的智慧輕觸你</div>
+  </div>
+
+  <div class="jar-wrap">
+    <svg width="72" height="88" viewBox="0 0 72 88" fill="none">
+      <ellipse cx="36" cy="83" rx="20" ry="4" fill="#f0e4d0"/>
+      <rect x="12" y="28" width="48" height="52" rx="2" fill="none" stroke="#c8a880" stroke-width="1"/>
+      <rect x="14" y="30" width="44" height="48" rx="1" fill="none" stroke="#e0cab0" stroke-width=".6"/>
+      <line x1="25" y1="7" x2="25" y2="32" stroke="#b8956c" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="36" y1="3" x2="36" y2="30" stroke="#a07850" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="47" y1="8" x2="47" y2="33" stroke="#b8956c" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="30" y1="5" x2="30" y2="31" stroke="#cdb090" stroke-width=".9" stroke-linecap="round"/>
+      <line x1="42" y1="4" x2="42" y2="31" stroke="#cdb090" stroke-width=".9" stroke-linecap="round"/>
+      <circle cx="36" cy="54" r="10" fill="none" stroke="#ddc8a8" stroke-width=".8"/>
+      <line x1="22" y1="42" x2="50" y2="42" stroke="#e8d8c4" stroke-width=".6"/>
+      <line x1="22" y1="66" x2="50" y2="66" stroke="#e8d8c4" stroke-width=".6"/>
+    </svg>
+    <button class="dBtn" id="drawBtn" onclick="draw()">接收今日密語</button>
+    <div class="hint" id="hintTxt">靜心，讓宇宙為你選一句話</div>
+  </div>
+
+  <div class="cwrap">
+    <div class="cinner" id="cinner">
+      <div class="cf">
+        <div class="cf-circle"><div class="cf-inner"></div></div>
+        <div class="cf-label">今日密語未啟封</div>
+        <div class="cf-sub">點擊上方按鈕，接收今日智慧</div>
+      </div>
+      <div class="cb" id="cback">
+        <div class="toprow">
+          <div class="abadge" id="abadge"></div>
+          <button class="fvBtn" id="fvBtn" onclick="toggleFav()">🤍</button>
+        </div>
+        <div class="illa" id="illa"></div>
+        <div class="ql">✦ 今日密語 ✦</div>
+        <div class="qt" id="qt"></div>
+        <div class="qs" id="qs"></div>
+        <div class="hr-dot"><span>◈</span></div>
+        <div class="stit">完整解析</div>
+        <div class="atxt" id="atxt"></div>
+        <div class="hr-dot"><span>◈</span></div>
+        <div class="stit">今日行動指引</div>
+        <div class="abox"><div class="actxt" id="actxt"></div></div>
+        <div class="cacts">
+          <button class="sBtn" onclick="openShare()">生成分享圖卡 →</button>
+          <button class="rBtn" onclick="reset()">← 明日再來</button>
+        </div>
+        <div class="cnt" id="cnt"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sbar">
+    <div class="si"><div class="sn" id="strN">0</div><div class="sl">連續天數</div></div>
+    <div class="si"><div class="sn" id="totN">0</div><div class="sl">已集籤數</div></div>
+    <div class="si"><div class="sn" id="favN">0</div><div class="sl">收藏數</div></div>
+  </div>
+
+  <div class="ov" id="favOv">
+    <div class="ovh">
+      <div class="ovttl">我的收藏</div>
+      <button class="xBtn" onclick="closeFav()">✕</button>
+    </div>
+    <div class="fvlist" id="fvList"></div>
+  </div>
+
+  <div class="sov" id="sharOv">
+    <div class="sc">
+      <div class="scd">宇宙捎來的話</div>
+      <div class="scil" id="scil"></div>
+      <div class="scq" id="scq"></div>
+      <div class="scsr" id="scsr"></div>
+      <div class="scan" id="scan"></div>
+      <div class="scf">長按截圖即可分享</div>
+    </div>
+    <div class="shi">長按圖卡截圖，儲存到手機</div>
+    <button class="scl" onclick="closeShare()">關閉</button>
+  </div>
+</div>
+
+<script>
+const FT=[
+  {a:"泰戈爾",ic:"✿",q:"如果你為失去太陽而哭泣，你也將失去群星。",s:"泰戈爾《飛鳥集》",il:"sun_stars",an:"悲傷會把眼光釘在一個失去上，遮蔽了生命仍在四周閃爍的一切光芒。泰戈爾不是叫你假裝不痛，而是提醒：當淚水流盡，請記得抬頭——星空從未離開。",ac:"今天，寫下三件「即使這讓我難過，我仍然擁有……」。讓眼淚流過，然後讓目光慢慢抬起。"},
+  {a:"泰戈爾",ic:"✿",q:"世界以痛吻我，我卻報之以歌。",s:"泰戈爾《飛鳥集》",il:"bird",an:"這不是天真的樂觀，而是深刻的選擇：在傷痛面前，我仍決定創造美。苦難無法剝奪我們回應的方式——那個回應的姿態，才是真正的自由。",ac:"今天，找一件讓你受傷的事，用任何形式「回應」它——寫一句話、畫一條線、哼一段旋律。讓表達成為你的出口。"},
+  {a:"泰戈爾",ic:"✿",q:"休息是工作的同胞，就像呼氣是吸氣的夥伴。",s:"泰戈爾",il:"wave",an:"我們的文化把停下來等同於懶散，但泰戈爾看見了節奏的本質：生命本來就是一呼一吸、一張一弛。用力之後的放鬆，不是中斷，而是下一次用力的準備。",ac:"今天給自己二十分鐘什麼都不做——不看手機、不計畫。只是存在。看看在那份靜默裡，什麼會悄悄浮現。"},
+  {a:"莎士比亞",ic:"⚘",q:"懷疑是叛徒，讓我們因恐懼嘗試而失去本可得到的好。",s:"莎士比亞《一報還一報》",il:"door",an:"最大的敵人不是外在的失敗，而是那個說「算了，反正不會成功」的內心聲音。猶豫是人性，但當它變成行動的牆，我們便在開始之前先輸了。",ac:"找出一件因「怕失敗」而拖著沒做的事，只採取一個最小的行動——傳一封信、寫下第一句話，或只是打開那個久未觸碰的文件。"},
+  {a:"莎士比亞",ic:"⚘",q:"我們知道自己是什麼，卻不知道自己可以成為什麼。",s:"莎士比亞《哈姆雷特》",il:"butterfly",an:"我們對「現在的自己」太過熟悉，反而讓它成了天花板。你現在所定義的自己，只是今天的你，不是明天的你的極限。",ac:"今天寫下「如果我相信自己可以……，我會……」，不審查、不評判，讓那個渴望說話的自己說完整。"},
+  {a:"榮格",ic:"◎",q:"你無法游回過去，因為那不是水流的方向。",s:"榮格",il:"river",an:"執著於過去的錯誤、遺憾或未竟之事，是在對抗生命本身的流動。那些往事已成為你的一部分，但它們不需要繼續佔據你的能量。",ac:"試著寫下一件你還在為之自責的事，然後溫柔地寫：「我已從中學習，我允許它流走。」"},
+  {a:"榮格",ic:"◎",q:"內心有光的人，即使走在黑暗中，也不會迷失方向。",s:"榮格",il:"lantern",an:"榮格相信每個人內心都有「自性」——你最真實、最完整的核心。當外在混亂時，回到那個內在的中心，你就不會失去自己。那道光從來都在你身裡。",ac:"花五分鐘靜坐，把手放在心口，深呼吸，問：「此刻，什麼對我來說是最重要的？」聆聽最深處的聲音。"},
+  {a:"榮格",ic:"◎",q:"陰影不是需要消滅的敵人，而是等待整合的自己。",s:"榮格心理學",il:"shadow",an:"榮格的「陰影」是我們不願承認、壓抑在心底的那些面向——憤怒、嫉妒、恐懼。但壓抑讓它們更強大；正視並接納，反而讓我們變得完整而有力量。",ac:"今天，試著承認一個你通常不敢說出口的感受（哪怕只是在心裡）。不評判，只是說：「我注意到我有這個感受。」"},
+  {a:"魯米",ic:"☽",q:"你所尋找的東西，也在尋找你。",s:"魯米",il:"circle_dot",an:"你渴望的連結、意義或療癒，並非遙不可及——它們也在向你靠近。你現在的渴望本身，就是一種方向的訊號。",ac:"今天寫下你內心最深的一個渴望，然後問：「我今天可以邁出多小的一步，讓自己更靠近它？」"},
+  {a:"魯米",ic:"☽",q:"傷口是光進來的地方。",s:"魯米",il:"crack_light",an:"我們最深的傷，往往就是最深的開口——讓柔軟進來、讓共鳴發生、讓轉化發生的地方。傷口不只是損失，也是入口。",ac:"想一個你的「傷口」，問：「這個傷讓我變得更柔軟、更有同理心了嗎？」如果是，那是光進來的證明。"},
+  {a:"尼采",ic:"◆",q:"一切苦難，若不能摧毀你，都將使你更強大。",s:"尼采《偶像的黃昏》",il:"mountain",an:"你內心有比自己想像更深厚的力量。每次撐過去，靈魂就在那個過程裡擴展了一點。你比你以為的，更能承受——也更能生長。",ac:"回想一次你以為撐不過去、但最後撐過來的經歷，在心裡說：「你做到了。謝謝你當時沒有放棄。」"},
+  {a:"尼采",ic:"◆",q:"沒有音樂的生活是一個錯誤。",s:"尼采",il:"music",an:"尼采說的是美、律動、讓靈魂震動的事物。那個讓你忘了時間、感到活著真好的東西，不是奢侈品，是必需品。",ac:"今天，給自己十分鐘聽一首你真正愛的音樂，不做其他事，只是聽。讓那個「因美而觸動」的感覺回來。"},
+  {a:"阿德勒",ic:"◑",q:"重要的不是你擁有什麼，而是你如何使用你所擁有的。",s:"阿德勒",il:"hands",an:"決定人生的不是先天條件或遭遇，而是我們面對這些的態度與行動。任何人、任何處境，都有可以做出的選擇——那個選擇，才是你真正的力量所在。",ac:"今天，列出一樣你「已經擁有」但還沒好好使用的資源——能力、關係、時間或工具。想一個讓它發揮的方法。"},
+  {a:"弗洛姆",ic:"◑",q:"愛是一種藝術，需要知識與努力。",s:"弗洛姆《愛的藝術》",il:"heart",an:"弗洛姆挑戰了「愛是自然就會」的迷思。愛不是偶然墜落的感覺，而是需要學習、練習、有意識投入的能力——愛自己如此，愛他人亦然。",ac:"今天，做一件有意識地「練習愛」的小事——對自己說一句溫柔的話，或對重要的人表達一個真實的感謝。"},
+  {a:"弗蘭克",ic:"◑",q:"當我們無法改變處境，我們被挑戰去改變自己。",s:"弗蘭克《活出意義來》",il:"lighthouse",an:"人最後的自由，是選擇自己面對苦難的態度。即使在最無力的情況下，那個選擇永遠屬於你。",ac:"面對你現在最無力改變的一件事，問：「在這個處境中，我能選擇的態度或回應是什麼？」那個選擇，就是你的力量。"},
+  {a:"村上春樹",ic:"✑",q:"哪裡會有人喜歡孤獨，不過是不喜歡失望罷了。",s:"村上春樹《挪威的森林》",il:"window",an:"那份孤獨背後，往往藏著的是一次次失望後築起的牆。承認這一點，不是示弱，而是誠實地看見自己內心真實的渴望。",ac:"今天，問自己：「我最近在哪些關係裡築起了一道牆？那堵牆後面，保護的是什麼？」只是看見，不必急著拆。"},
+  {a:"三毛",ic:"✑",q:"心若沒有棲息的地方，到哪裡都是在流浪。",s:"三毛",il:"home",an:"三毛說的「棲息地」不是實體的家，而是內心的安頓。當我們找不到自己真正的價值與認同，再繁華的地方也感覺是他鄉。",ac:"今天，想一想：什麼情況讓你感到「安心、是自己」？那種感覺就是你內心的家。試著在今天創造一個這樣的時刻。"},
+  {a:"張愛玲",ic:"✑",q:"生命是一件華美的袍，裡面爬滿了虱子。",s:"張愛玲",il:"robe",an:"生命真的很美，也真的很難。張愛玲不叫你假裝看不見那些煩惱、掙扎、疲憊——但華美依然是華美。兩者同時為真，這才是生命的全貌。",ac:"今天，承認生活裡一件讓你疲憊的「虱子」，然後也找出一件讓你覺得「還是值得」的事。兩者都值得被看見。"},
+  {a:"馬可·奧理略",ic:"◈",q:"你有力量掌控你的心智，而不是外在的事件。認清這點，你將找到力量。",s:"馬可·奧理略《沉思錄》",il:"compass",an:"區分「我能控制的」和「我不能控制的」。天氣、他人的反應、過去的事——不在你的掌控內。但你的判斷、你的回應方式——永遠在你手中。",ac:"今天最讓你焦慮的事，有多少是你能控制的？把它們分成兩欄。只專注在你能做的那一欄。"},
+  {a:"林清玄",ic:"✑",q:"以清淨心看世界，以歡喜心過生活，以平常心生情味，以柔軟心除障礙。",s:"林清玄",il:"lotus",an:"清淨去雜念，歡喜找美好，平常化執著，柔軟破剛硬。聽起來簡單，卻是每天都需要練習的功課。",ac:"今天，選一個你最需要的「心」——清淨、歡喜、平常或柔軟——作為今天的關鍵字，看看帶著它，生活有什麼不同。"}
+];
+
+const IL={
+  sun_stars:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><circle cx="22" cy="30" r="11" fill="none" stroke="#c8a880" stroke-width="1"/><line x1="22" y1="14" x2="22" y2="19" stroke="#c8a880" stroke-width=".9" stroke-linecap="round"/><line x1="22" y1="41" x2="22" y2="46" stroke="#c8a880" stroke-width=".9" stroke-linecap="round"/><line x1="6" y1="30" x2="11" y2="30" stroke="#c8a880" stroke-width=".9" stroke-linecap="round"/><line x1="33" y1="30" x2="38" y2="30" stroke="#c8a880" stroke-width=".9" stroke-linecap="round"/><circle cx="22" cy="30" r="5" fill="#f0e4d0"/><circle cx="56" cy="12" r="2" fill="#c8a880"/><circle cx="67" cy="22" r="1.5" fill="#d4b898"/><circle cx="73" cy="9" r="1.8" fill="#c8a880"/><circle cx="62" cy="36" r="1.4" fill="#d8c4a8"/><line x1="56" y1="7" x2="56" y2="17" stroke="#e0cdb0" stroke-width=".6"/><line x1="51" y1="12" x2="61" y2="12" stroke="#e0cdb0" stroke-width=".6"/></svg>',
+  bird:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M16 28 Q24 16 34 23 Q28 23 24 28Z" fill="#f0e4d0" stroke="#c8a880" stroke-width=".9"/><path d="M34 23 Q44 16 52 28 Q46 23 34 23Z" fill="#f5ece0" stroke="#d4b898" stroke-width=".9"/><circle cx="34" cy="25" r="2" fill="#b8956c"/><path d="M48 20 Q57 11 64 15 Q60 15 57 20Z" fill="#ece0d0" stroke="#cdb090" stroke-width=".7"/><path d="M4 48 Q22 43 42 44 Q60 45 76 42" stroke="#e8d8c4" stroke-width=".7" fill="none" stroke-linecap="round" stroke-dasharray="2 2"/></svg>',
+  wave:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M4 22 Q16 11 28 22 Q40 33 52 22 Q64 11 76 22" stroke="#c0956c" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M4 33 Q16 22 28 33 Q40 44 52 33 Q64 22 76 33" stroke="#d8b898" stroke-width=".9" fill="none" stroke-linecap="round"/><path d="M4 43 Q16 38 28 43 Q40 48 52 43 Q64 38 76 43" stroke="#e8d4b8" stroke-width=".6" fill="none" stroke-linecap="round"/></svg>',
+  door:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><rect x="24" y="6" width="32" height="46" rx="1" fill="none" stroke="#c0a070" stroke-width="1"/><rect x="26" y="8" width="28" height="42" rx="1" fill="none" stroke="#e0cab0" stroke-width=".5"/><circle cx="49" cy="29" r="2" fill="#c8a880"/><line x1="6" y1="52" x2="24" y2="52" stroke="#e0cdb0" stroke-width=".8" stroke-linecap="round"/><line x1="56" y1="52" x2="74" y2="52" stroke="#e0cdb0" stroke-width=".8" stroke-linecap="round"/></svg>',
+  butterfly:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M40 28 Q27 11 10 16 Q6 25 19 31 Q27 36 40 28Z" fill="#f5ece0" stroke="#c8a880" stroke-width=".9"/><path d="M40 28 Q53 11 70 16 Q74 25 61 31 Q53 36 40 28Z" fill="#f5ece0" stroke="#c8a880" stroke-width=".9"/><path d="M40 28 Q30 40 17 41 Q13 48 25 47 Q35 44 40 28Z" fill="#faf4ec" stroke="#d4b898" stroke-width=".9"/><path d="M40 28 Q50 40 63 41 Q67 48 55 47 Q45 44 40 28Z" fill="#faf4ec" stroke="#d4b898" stroke-width=".9"/><line x1="40" y1="22" x2="36" y2="13" stroke="#c8a880" stroke-width=".8" stroke-linecap="round"/><line x1="40" y1="22" x2="44" y2="13" stroke="#c8a880" stroke-width=".8" stroke-linecap="round"/></svg>',
+  river:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M4 44 Q20 24 40 32 Q60 40 76 20" stroke="#b8956c" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M4 50 Q22 34 42 42 Q62 49 76 32" stroke="#d4b898" stroke-width="1" fill="none" stroke-linecap="round"/></svg>',
+  lantern:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><line x1="40" y1="2" x2="40" y2="10" stroke="#c8a880" stroke-width="1.1" stroke-linecap="round"/><rect x="27" y="10" width="26" height="34" rx="2" fill="none" stroke="#c0a070" stroke-width="1"/><ellipse cx="40" cy="24" rx="6" ry="8" fill="#fdf0e0"/><line x1="30" y1="15" x2="30" y2="41" stroke="#e8d4b8" stroke-width=".5"/><line x1="35" y1="11" x2="35" y2="43" stroke="#e8d4b8" stroke-width=".5"/><line x1="45" y1="11" x2="45" y2="43" stroke="#e8d4b8" stroke-width=".5"/><line x1="50" y1="15" x2="50" y2="41" stroke="#e8d4b8" stroke-width=".5"/><rect x="33" y="44" width="14" height="3" rx="1" fill="#e8d4b8"/><circle cx="29" cy="51" r="1.8" fill="#ecdec8"/><circle cx="40" cy="53" r="1.8" fill="#ecdec8"/><circle cx="51" cy="51" r="1.8" fill="#ecdec8"/></svg>',
+  shadow:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><circle cx="30" cy="24" r="13" fill="none" stroke="#c8a880" stroke-width="1"/><ellipse cx="46" cy="36" rx="13" ry="8" fill="#f5ece0" stroke="#e0cab0" stroke-width=".8"/><line x1="30" y1="24" x2="46" y2="36" stroke="#d8c4a8" stroke-width=".8" stroke-dasharray="2 2"/></svg>',
+  circle_dot:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><circle cx="40" cy="28" r="20" fill="none" stroke="#c8a880" stroke-width="1"/><circle cx="40" cy="28" r="12" fill="none" stroke="#e0cab0" stroke-width=".7"/><circle cx="40" cy="28" r="4" fill="#f0e4d0"/><circle cx="40" cy="8" r="1.5" fill="#c8a880"/><circle cx="40" cy="48" r="1.5" fill="#c8a880"/><circle cx="20" cy="28" r="1.5" fill="#c8a880"/><circle cx="60" cy="28" r="1.5" fill="#c8a880"/></svg>',
+  crack_light:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><rect x="18" y="8" width="44" height="40" rx="2" fill="none" stroke="#c8a880" stroke-width="1"/><path d="M40 8 L36 24 L42 22 L37 48" stroke="#b8956c" stroke-width="1.1" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="35" y1="16" x2="28" y2="12" stroke="#d4b898" stroke-width=".7" stroke-linecap="round"/><line x1="43" y1="18" x2="50" y2="12" stroke="#d4b898" stroke-width=".7" stroke-linecap="round"/></svg>',
+  mountain:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><polygon points="40,6 68,49 12,49" fill="none" stroke="#c0a070" stroke-width="1" stroke-linejoin="round"/><polygon points="24,49 44,22 62,49" fill="none" stroke="#d8c4a8" stroke-width=".7" stroke-linejoin="round"/><path d="M33 18 Q40 9 47 18" fill="#fdf6ee"/><line x1="4" y1="52" x2="76" y2="52" stroke="#e8d8c4" stroke-width=".7"/></svg>',
+  music:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><line x1="30" y1="10" x2="30" y2="38" stroke="#c0a070" stroke-width="1.1" stroke-linecap="round"/><line x1="48" y1="6" x2="48" y2="33" stroke="#c0a070" stroke-width="1.1" stroke-linecap="round"/><path d="M30 10 L48 6" stroke="#c0a070" stroke-width="1.1" stroke-linecap="round"/><ellipse cx="26" cy="41" rx="6" ry="4" fill="none" stroke="#c8a880" stroke-width=".9"/><ellipse cx="44" cy="37" rx="6" ry="4" fill="none" stroke="#c8a880" stroke-width=".9"/></svg>',
+  hands:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M20 42 Q20 30 26 27 Q30 25 31 30 L31 19 Q31 15 34 15 Q37 15 37 19 L37 17 Q37 13 40 13 Q43 13 43 17 L43 19 Q43 15 46 15 Q49 15 49 21 L49 34 Q53 30 55 32 Q58 36 53 44 Q49 51 40 52 Q27 52 20 42Z" fill="none" stroke="#c0a070" stroke-width="1" stroke-linejoin="round"/></svg>',
+  heart:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M40 47 C40 47 13 32 13 18 C13 10 20 5 28 5 C33 5 38 8 40 15 C42 8 47 5 52 5 C60 5 67 10 67 18 C67 32 40 47 40 47Z" fill="none" stroke="#c0a070" stroke-width="1"/></svg>',
+  lighthouse:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><rect x="34" y="22" width="12" height="28" rx="1" fill="none" stroke="#c0a070" stroke-width="1"/><rect x="31" y="16" width="18" height="9" rx="1" fill="none" stroke="#c8a880" stroke-width="1"/><path d="M40 16 L40 6" stroke="#c0a070" stroke-width="1" stroke-linecap="round"/><path d="M40 6 L31 12" stroke="#d8c4a8" stroke-width=".7" stroke-linecap="round"/><path d="M40 6 L49 12" stroke="#d8c4a8" stroke-width=".7" stroke-linecap="round"/><path d="M40 6 L24 8" stroke="#e4d0b8" stroke-width=".6" stroke-linecap="round"/><path d="M40 6 L56 8" stroke="#e4d0b8" stroke-width=".6" stroke-linecap="round"/><line x1="26" y1="52" x2="54" y2="52" stroke="#d8c4a8" stroke-width="1" stroke-linecap="round"/></svg>',
+  window:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><rect x="14" y="6" width="52" height="44" rx="2" fill="none" stroke="#c0a070" stroke-width="1"/><line x1="40" y1="6" x2="40" y2="50" stroke="#e0cab0" stroke-width=".7"/><line x1="14" y1="28" x2="66" y2="28" stroke="#e0cab0" stroke-width=".7"/><circle cx="59" cy="17" r="3" fill="none" stroke="#c8a880" stroke-width=".8"/></svg>',
+  home:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M40 8 L68 30 L68 53 L12 53 L12 30 Z" fill="none" stroke="#c0a070" stroke-width="1" stroke-linejoin="round"/><line x1="8" y1="30" x2="72" y2="30" stroke="#e0cab0" stroke-width=".7" stroke-linecap="round"/><rect x="33" y="38" width="14" height="15" rx="1" fill="none" stroke="#c8a880" stroke-width=".8"/><rect x="18" y="34" width="10" height="9" rx="1" fill="none" stroke="#d0b898" stroke-width=".7"/><rect x="52" y="34" width="10" height="9" rx="1" fill="none" stroke="#d0b898" stroke-width=".7"/></svg>',
+  robe:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M25 8 Q40 4 55 8 L63 52 L17 52 Z" fill="none" stroke="#c0a070" stroke-width="1" stroke-linejoin="round"/><path d="M31 8 Q40 13 49 8" fill="none" stroke="#cdb090" stroke-width=".8" stroke-linecap="round"/><circle cx="32" cy="26" r="1.2" fill="#c8a880"/><circle cx="37" cy="33" r="1.2" fill="#c8a880"/><circle cx="44" cy="26" r="1.2" fill="#c8a880"/><circle cx="49" cy="38" r="1.2" fill="#c8a880"/></svg>',
+  compass:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><circle cx="40" cy="28" r="18" fill="none" stroke="#c0a070" stroke-width="1"/><circle cx="40" cy="28" r="12" fill="none" stroke="#e0cab0" stroke-width=".6"/><polygon points="40,13 42.5,26 40,30 37.5,26" fill="#c8a880"/><polygon points="40,43 42.5,30 40,28 37.5,30" fill="#e8d4b8"/><circle cx="40" cy="28" r="2.5" fill="#b8956c"/><line x1="40" y1="10" x2="40" y2="7" stroke="#e0cab0" stroke-width=".8" stroke-linecap="round"/><line x1="40" y1="49" x2="40" y2="46" stroke="#e0cab0" stroke-width=".8" stroke-linecap="round"/><line x1="22" y1="28" x2="19" y2="28" stroke="#e0cab0" stroke-width=".8" stroke-linecap="round"/><line x1="61" y1="28" x2="58" y2="28" stroke="#e0cab0" stroke-width=".8" stroke-linecap="round"/></svg>',
+  lotus:'<svg width="80" height="56" viewBox="0 0 80 56" fill="none"><path d="M40 46 Q30 36 30 25 Q30 16 37 14 Q40 12 40 20 Q40 12 43 14 Q50 16 50 25 Q50 36 40 46Z" fill="none" stroke="#c0a070" stroke-width="1"/><path d="M40 46 Q26 39 22 27 Q18 16 27 12 Q33 10 35 18 Q30 28 40 46Z" fill="none" stroke="#cdb090" stroke-width=".8"/><path d="M40 46 Q54 39 58 27 Q62 16 53 12 Q47 10 45 18 Q50 28 40 46Z" fill="none" stroke="#cdb090" stroke-width=".8"/><path d="M40 46 L40 54" stroke="#d8c4a8" stroke-width=".9" stroke-linecap="round"/><ellipse cx="40" cy="54" rx="11" ry="2" fill="none" stroke="#e4d0b8" stroke-width=".6"/></svg>'
+};
+
+const SK='cosmosZenWarm_v1';
+function today(){const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
+function fmt(d){const dy=['日','一','二','三','四','五','六'];return `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日　星期${dy[d.getDay()]}`;}
+function load(){try{const s=localStorage.getItem(SK);if(s)return JSON.parse(s);}catch(e){}return{idx:null,date:null,streak:0,last:null,total:0,favs:[],seen:[]};}
+function save(st){try{localStorage.setItem(SK,JSON.stringify(st));}catch(e){}}
+let ST=load(),CUR=null;
+function bars(){document.getElementById('strN').textContent=ST.streak;document.getElementById('totN').textContent=ST.total;document.getElementById('favN').textContent=ST.favs.length;}
+function updFav(){if(CUR===null)return;document.getElementById('fvBtn').textContent=ST.favs.some(f=>f.i===CUR)?'❤️':'🤍';}
+function show(idx){
+  CUR=idx;const f=FT[idx];
+  document.getElementById('abadge').textContent=f.ic+' '+f.a;
+  document.getElementById('qt').textContent=f.q;
+  document.getElementById('qs').textContent='── '+f.s;
+  document.getElementById('atxt').textContent=f.an;
+  document.getElementById('actxt').textContent=f.ac;
+  document.getElementById('illa').innerHTML=IL[f.il]||'';
+  document.getElementById('cnt').textContent=`第 ${idx+1} 籤　共 ${FT.length} 籤`;
+  document.getElementById('cinner').classList.add('flip');
+  document.getElementById('drawBtn').disabled=true;
+  document.getElementById('hintTxt').textContent='今日密語已接收，明日再來';
+  updFav();
+}
+function draw(){
+  const idx=Math.floor(Math.random()*FT.length),t=today();
+  ST.idx=idx;ST.date=t;
+  if(ST.last){const diff=(new Date(t.replace(/-/g,'/')) - new Date(ST.last.replace(/-/g,'/')))/(864e5);ST.streak=diff<=1?ST.streak+1:1;}else ST.streak=1;
+  ST.last=t;if(!ST.seen)ST.seen=[];
+  if(!ST.seen.includes(t)){ST.seen.push(t);ST.total++;}
+  save(ST);bars();show(idx);
+}
+function reset(){ST.idx=null;ST.date=null;save(ST);CUR=null;document.getElementById('cinner').classList.remove('flip');document.getElementById('drawBtn').disabled=false;document.getElementById('hintTxt').textContent='靜心，讓宇宙為你選一句話';}
+function toggleFav(){
+  if(CUR===null)return;
+  const f=FT[CUR],i=ST.favs.findIndex(x=>x.i===CUR);
+  if(i>=0)ST.favs.splice(i,1);else ST.favs.push({i:CUR,q:f.q,s:f.s});
+  save(ST);updFav();bars();
+}
+function openFav(){
+  document.getElementById('favOv').classList.add('on');
+  document.getElementById('fvList').innerHTML=ST.favs.length===0
+    ?'<div class="emp">還沒有收藏<br>抽到喜歡的籤就點心型收藏吧 🤍</div>'
+    :ST.favs.map(f=>`<div class="fvc"><div class="fvq">${f.q}</div><div class="fvsrc">── ${f.s}</div></div>`).join('');
+}
+function closeFav(){document.getElementById('favOv').classList.remove('on');}
+function openShare(){
+  if(CUR===null)return;const f=FT[CUR];
+  document.getElementById('scil').innerHTML=IL[f.il]||'';
+  document.getElementById('scq').textContent=f.q;
+  document.getElementById('scsr').textContent='── '+f.s;
+  document.getElementById('scan').textContent=f.an;
+  document.getElementById('sharOv').classList.add('on');
+}
+function closeShare(){document.getElementById('sharOv').classList.remove('on');}
+let dark=false;
+function toggleDark(){
+  dark=!dark;
+  document.getElementById('app').classList.toggle('dark',dark);
+  document.getElementById('dkIco').innerHTML=dark
+    ?'<circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.8" fill="none"/><line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+    :'<path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>';
+  localStorage.setItem('cwDark',dark?'1':'0');
+}
+document.getElementById('dateChip').textContent=fmt(new Date());
+if(localStorage.getItem('cwDark')==='1'){dark=true;document.getElementById('app').classList.add('dark');document.getElementById('dkIco').innerHTML='<circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.8" fill="none"/><line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>';}
+bars();
+if(ST.idx!==null&&ST.date===today())show(ST.idx);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
