@@ -14,6 +14,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X1M1NEZYDM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X1M1NEZYDM');
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans TC',sans-serif;background:#fdf6ee;min-height:100vh;margin:0;}
@@ -272,13 +280,14 @@ function draw(){
   if(ST.last){const diff=(new Date(t.replace(/-/g,'/')) - new Date(ST.last.replace(/-/g,'/')))/(864e5);ST.streak=diff<=1?ST.streak+1:1;}else ST.streak=1;
   ST.last=t;if(!ST.seen)ST.seen=[];
   if(!ST.seen.includes(t)){ST.seen.push(t);ST.total++;}
+  gtag('event','draw_fortune',{author:FT[idx].a,index:idx});
   save(ST);bars();show(idx);
 }
 function reset(){ST.idx=null;ST.date=null;save(ST);CUR=null;document.getElementById('cinner').classList.remove('flip');document.getElementById('drawBtn').disabled=false;document.getElementById('hintTxt').textContent='靜心，讓宇宙為你選一句話';}
 function toggleFav(){
   if(CUR===null)return;
   const f=FT[CUR],i=ST.favs.findIndex(x=>x.i===CUR);
-  if(i>=0)ST.favs.splice(i,1);else ST.favs.push({i:CUR,q:f.q,s:f.s});
+  if(i>=0){ST.favs.splice(i,1);}else{ST.favs.push({i:CUR,q:f.q,s:f.s});gtag('event','add_favourite',{author:f.a});}
   save(ST);updFav();bars();
 }
 function openFav(){
@@ -290,6 +299,7 @@ function openFav(){
 function closeFav(){document.getElementById('favOv').classList.remove('on');}
 function openShare(){
   if(CUR===null)return;const f=FT[CUR];
+  gtag('event','open_share_card',{author:f.a});
   document.getElementById('scil').innerHTML=IL[f.il]||'';
   document.getElementById('scq').textContent=f.q;
   document.getElementById('scsr').textContent='── '+f.s;
